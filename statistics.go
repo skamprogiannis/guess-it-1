@@ -10,6 +10,7 @@ import (
 	"strings"
 )
 
+// Summary contains rounded descriptive statistics for a set of integers.
 type Summary struct {
 	Average           int
 	Median            int
@@ -17,6 +18,7 @@ type Summary struct {
 	StandardDeviation int
 }
 
+// CalculateSummary returns rounded average, median, variance, and standard deviation.
 func CalculateSummary(nums []int) Summary {
 	sum := 0
 	for _, n := range nums {
@@ -47,22 +49,27 @@ func CalculateSummary(nums []int) Summary {
 	}
 }
 
+// CalculateAverage returns the rounded average of nums.
 func CalculateAverage(nums []int) int {
 	return CalculateSummary(nums).Average
 }
 
+// CalculateMedian returns the rounded median of nums.
 func CalculateMedian(nums []int) int {
 	return CalculateSummary(nums).Median
 }
 
+// CalculateVariance returns the rounded variance of nums.
 func CalculateVariance(nums []int) int {
 	return CalculateSummary(nums).Variance
 }
 
+// CalculateStandardDeviation returns the rounded standard deviation of nums.
 func CalculateStandardDeviation(nums []int) int {
 	return CalculateSummary(nums).StandardDeviation
 }
 
+// ReadDataLines reads non-empty trimmed lines from path.
 func ReadDataLines(path string) ([]string, error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -87,6 +94,7 @@ func ReadDataLines(path string) ([]string, error) {
 	return lines, nil
 }
 
+// ParseInput converts text lines to integers and returns warnings for skipped lines.
 func ParseInput(lines []string) ([]int, []string, error) {
 	nums := make([]int, 0, len(lines))
 	parseWarnings := make([]string, 0)

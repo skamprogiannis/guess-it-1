@@ -6,6 +6,7 @@ const (
 	minimumRangeWidth         = 25
 )
 
+// PredictRange returns lower and upper bounds for the next likely input value.
 func PredictRange(nums []int) (int, int) {
 	if len(nums) == 0 {
 		return 0, 100
@@ -23,6 +24,7 @@ func PredictRange(nums []int) (int, int) {
 	return prediction - width, prediction + width
 }
 
+// lastValues returns at most limit values from the end of nums.
 func lastValues(nums []int, limit int) []int {
 	if len(nums) <= limit {
 		return nums
