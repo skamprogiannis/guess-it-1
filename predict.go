@@ -1,19 +1,21 @@
 package main
 
+const (
+	historyWindowSize         = 12
+	standardDeviationMultiple = 2
+	minimumRangeWidth         = 25
+)
+
 func PredictRange(nums []int) (int, int) {
 	if len(nums) == 0 {
 		return 0, 100
 	}
 
-	window := lastValues(nums, 12)
+	window := lastValues(nums, historyWindowSize)
 	summary := CalculateSummary(window)
-	width := summary.StandardDeviation * 2
-
-	if width < 25 {
-		width = 25
-	}
-
+	width := max(summary.StandardDeviation * standardDeviationMultiple, minimumRangeWidth)
 	prediction := summary.Average
+
 	if len(window) >= 2 {
 		prediction += window[len(window)-1] - window[len(window)-2]
 	}
