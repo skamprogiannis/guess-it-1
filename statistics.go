@@ -10,16 +10,16 @@ import (
 	"strings"
 )
 
-// Summary contains rounded descriptive statistics for a set of integers.
-type Summary struct {
-	Average           int
-	Median            int
-	Variance          int
-	StandardDeviation int
+// stats contains rounded descriptive statistics for a set of integers.
+type stats struct {
+	average           int
+	median            int
+	variance          int
+	standardDeviation int
 }
 
-// CalculateSummary returns rounded average, median, variance, and standard deviation.
-func CalculateSummary(nums []int) Summary {
+// calculateStats returns rounded average, median, variance, and standard deviation.
+func calculateStats(nums []int) stats {
 	sum := 0
 	for _, n := range nums {
 		sum += n
@@ -41,36 +41,36 @@ func CalculateSummary(nums []int) Summary {
 	}
 	variance := squaredDeviationSum / float64(len(nums))
 
-	return Summary{
-		Average:           int(math.Round(average)),
-		Median:            int(math.Round(median)),
-		Variance:          int(math.Round(variance)),
-		StandardDeviation: int(math.Round(math.Sqrt(variance))),
+	return stats{
+		average:           int(math.Round(average)),
+		median:            int(math.Round(median)),
+		variance:          int(math.Round(variance)),
+		standardDeviation: int(math.Round(math.Sqrt(variance))),
 	}
 }
 
-// CalculateAverage returns the rounded average of nums.
-func CalculateAverage(nums []int) int {
-	return CalculateSummary(nums).Average
+// calculateAverage returns the rounded average of nums.
+func calculateAverage(nums []int) int {
+	return calculateStats(nums).average
 }
 
-// CalculateMedian returns the rounded median of nums.
-func CalculateMedian(nums []int) int {
-	return CalculateSummary(nums).Median
+// calculateMedian returns the rounded median of nums.
+func calculateMedian(nums []int) int {
+	return calculateStats(nums).median
 }
 
-// CalculateVariance returns the rounded variance of nums.
-func CalculateVariance(nums []int) int {
-	return CalculateSummary(nums).Variance
+// calculateVariance returns the rounded variance of nums.
+func calculateVariance(nums []int) int {
+	return calculateStats(nums).variance
 }
 
-// CalculateStandardDeviation returns the rounded standard deviation of nums.
-func CalculateStandardDeviation(nums []int) int {
-	return CalculateSummary(nums).StandardDeviation
+// calculateStandardDeviation returns the rounded standard deviation of nums.
+func calculateStandardDeviation(nums []int) int {
+	return calculateStats(nums).standardDeviation
 }
 
-// ReadDataLines reads non-empty trimmed lines from path.
-func ReadDataLines(path string) ([]string, error) {
+// readDataLines reads non-empty trimmed lines from path.
+func readDataLines(path string) ([]string, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -94,8 +94,8 @@ func ReadDataLines(path string) ([]string, error) {
 	return lines, nil
 }
 
-// ParseInput converts text lines to integers and returns warnings for skipped lines.
-func ParseInput(lines []string) ([]int, []string, error) {
+// parseInput converts text lines to integers and returns warnings for skipped lines.
+func parseInput(lines []string) ([]int, []string, error) {
 	nums := make([]int, 0, len(lines))
 	parseWarnings := make([]string, 0)
 	for _, line := range lines {

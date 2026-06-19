@@ -13,10 +13,11 @@ func PredictRange(nums []int) (int, int) {
 	}
 
 	window := lastValues(nums, historyWindowSize)
-	summary := CalculateSummary(window)
-	width := max(summary.StandardDeviation * standardDeviationMultiple, minimumRangeWidth)
-	prediction := summary.Average
+	stats := calculateStats(window)
+	width := max(stats.standardDeviation*standardDeviationMultiple, minimumRangeWidth)
+	prediction := stats.average
 
+	// crude momentum adjustment
 	if len(window) >= 2 {
 		prediction += window[len(window)-1] - window[len(window)-2]
 	}
