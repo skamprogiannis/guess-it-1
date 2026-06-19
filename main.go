@@ -11,7 +11,7 @@ import (
 // main reads numbers from standard input and prints a range for each next value.
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-	history := make([]int, 0)
+	var history []int
 
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
@@ -19,13 +19,17 @@ func main() {
 			continue
 		}
 
-		n, err := strconv.Atoi(line)
+		num, err := strconv.Atoi(line)
 		if err != nil {
 			continue
 		}
 
-		history = append(history, n)
+		history = append(history, num)
 		low, high := PredictRange(history)
 		fmt.Printf("%d %d\n", low, high)
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 }
