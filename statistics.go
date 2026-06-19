@@ -44,23 +44,3 @@ func calculateStats(nums []int) stats {
 	}
 }
 
-// calculateAverage returns the rounded average of nums.
-func calculateAverage(nums []int) int {
-	return calculateStats(nums).average
-}
-
-// calculateMedian returns the rounded median of nums.
-func calculateMedian(nums []int) int {
-	return calculateStats(nums).median
-}
-
-// calculateVariance returns the rounded variance of nums.
-func calculateVariance(nums []int) int {
-	return calculateStats(nums).variance
-}
-
-// calculateStandardDeviation returns the rounded standard deviation of nums.
-func calculateStandardDeviation(nums []int) int {
-	return calculateStats(nums).standardDeviation
-}
-
