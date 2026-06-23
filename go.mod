@@ -1,3 +1,3 @@
 module guess-it-student
 
-go 1.26.3
+go 1.19

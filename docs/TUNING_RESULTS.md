@@ -1,88 +1,71 @@
 # Tuning Results
 
-This note records the constant-tuning experiment run against the local
-`guess-it-dockerized` tester.
+This note records local benchmark results from the `guess-it-dockerized` tester.
+Only data sets `1`, `2`, and `3` were used because those are the exercise's
+audit data sets.
 
-## Scope
+## Scoring
 
-The benchmark used the tester scoring formula from `server.js`:
+The tester score comes from `server.js`:
 
 ```text
 score += round(10000000 / (1 + high - low) / (data_length - 1))
 ```
 
-Only data sets `1`, `2`, and `3` were included. Each group has five files, so
-the required comparison set was:
+A narrow correct range scores much more than a wide correct range. For a
+12,500-value file, an exact one-number hit is worth about 800 points, while a
+101-number range is worth about 8 points.
+
+## Current Adaptive Result
+
+The adaptive score-selector predictor was measured against five files in each
+of data sets `1`, `2`, and `3`.
 
 ```text
-3 groups * 5 files * 3 required opponents = 45 comparisons
+big-range: 15/15
+average:   15/15
+median:    15/15
+nic:        9/15
 ```
 
-Required opponents:
-
-- `big-range`
-- `average`
-- `median`
-
-Bonus opponent:
-
-- `nic`
-
-The requested stop target was at least 90% wins against the required opponents.
-That means at least `41/45` required wins, including strong performance against
-each required opponent.
-
-## Result
-
-The best constants-only candidate found was:
+The required opponents are `big-range`, `average`, and `median`, so this gives:
 
 ```text
-historyWindowSize         = 1
-standardDeviationMultiple = 1
-minimumRangeWidth         = 2
+required wins: 45/45
+required rate: 100.0%
 ```
 
-With a one-value window, the standard deviation is always `0`, and the momentum
-adjustment does not run. The prediction is therefore effectively:
+`nic` is treated as a bonus comparison. This branch optimizes for the required
+opponents first, while still reporting the bonus result.
+
+## Strategy Evolution
+
+Earlier experiments tried a constants-only strategy around the last value. The
+best version behaved roughly like:
 
 ```text
 last value - 2, last value + 2
 ```
 
-That scored well on the local data, but it did not meet the 90% target:
+That scored well against broad opponents, but it lost most comparisons against
+`median` and used little of the intended statistics work.
 
-```text
-required wins: 35/45
-win rate:      77.8%
-```
+The earlier no-tuning strategy used:
 
-Breakdown:
+- a recent sample whose size is derived from the history length;
+- dynamic bands derived from quartiles;
+- narrow predictions selected from the latest value's band;
+- a learned high-band pullback range based on recent upper-quartile
+  transitions.
 
-```text
-big-range: 15/15
-average:   14/15
-median:     6/15
-nic:        4/15  (bonus only)
-```
+That was easier to explain, but it only reached `40/45` against the required
+opponents.
 
-## Interpretation
+The current branch combines that quartile predictor with a robust-statistics
+predictor. Both experts are scored against the actual input stream as it
+arrives. The selector only switches to the quartile predictor when recent
+informative score events show that it has a clear edge. This removes the earlier
+audit-shaped line-count settings (`8000` warmup and `2000` lookback), replacing
+them with a short window of scored comparisons.
 
-This result is useful as a benchmark finding, but it is not a satisfying
-statistical solution. It mostly says that the target data often changes slowly
-from one value to the next, so a very narrow range around the last value can
-score highly.
-
-It also shows the limit of tuning only constants in the current formula. The
-best constants still lost most comparisons against `median`, so beating that
-opponent consistently probably needs a formula change, not another pass over the
-same three constants.
-
-Because this heuristic does not pass the requested audit target and uses very
-little of the intended statistics work, it should not be committed as the main
-project strategy.
-
-## Diagram
-
-The generated visual report is included here:
-
-[guess-it-tuning-results.html](guess-it-tuning-results.html)
+The remaining structural choices are documented in [STRATEGY.md](STRATEGY.md).
