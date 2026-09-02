@@ -1,5 +1,9 @@
 # Tuning Results
 
+> **Historical benchmark record.** The external Zone01 tester and audit data
+> are not included in this repository, so these measurements are documented
+> results rather than claims reproduced by the unit-test suite or CI.
+
 This note records local benchmark results from the `guess-it-dockerized` tester.
 Only data sets `1`, `2`, and `3` were used because those are the exercise's
 audit data sets.
@@ -69,3 +73,7 @@ audit-shaped line-count settings (`8000` warmup and `2000` lookback), replacing
 them with a short window of scored comparisons.
 
 The remaining structural choices are documented in [STRATEGY.md](STRATEGY.md).
+
+The generated [constants-only HTML report](guess-it-tuning-results.html) belongs
+to the earlier unsuccessful experiment. It is preserved as an archive and does
+not report results for the current adaptive predictor.

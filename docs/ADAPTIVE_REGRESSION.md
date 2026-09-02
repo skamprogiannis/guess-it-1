@@ -1,5 +1,9 @@
 # Adaptive Regression Notes
 
+> **Design exploration.** These notes capture an approach considered during
+> development. The canonical `tester-optimized` branch uses robust statistics,
+> quartile bands, and a rolling expert selector instead of linear regression.
+
 `guess-it-1` asks the program to read one number at a time and print a range
 where the next number is expected to fall. The input can be treated as a graph:
 the line number is `x`, and the value read from standard input is `y`.
